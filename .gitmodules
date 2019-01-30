@@ -1,0 +1,3 @@
+[submodule "external_dependencies/unity"]
+	path = external_dependencies/unity
+	url = https://github.com/ThrowTheSwitch/Unity
