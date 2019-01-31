@@ -1,0 +1,44 @@
+/**
+ * @file	at_cmd_config.h
+ * @brief	Contains configuration of AT command handling library.
+ */
+
+#ifndef AT_CMD_CONFIG_HPP
+#define AT_CMD_CONFIG_HPP
+
+//! The size of the RX buffer
+#define AT_CMD_HANDLER_RX_BUFLEN 256
+
+/**
+ * Some AT commands prompt for input data with '>' character. Uncomment this if the device won't send a newline after
+ * the prompt character.
+ */
+#define AT_CMD_HANDLER_NO_NEWLINE_AFTER_PROMPT
+
+/**
+ * \brief       Here define not-extended AT commands like ATE, ATD, ATS0, etc. -
+ *              those which doesn't have '+' after the 'AT' prefix.
+ *
+ * The enum class at_cmd will contain those commands so you must access them when calling the interface.
+ */
+#define AT_COMMANDS_NOT_EXTENDED e, d, s0
+
+/**
+ * \brief      Here define the extended AT commands (which start with 'AT+') which you want to use and
+ *             which are supported by your device.
+ *
+ * The enum class at_cmd will contain those commands so you must access them when calling the interface.
+ */
+#define AT_COMMANDS_EXTENDED first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth
+
+/**
+ * \brief Names of the unsolicited messages which can be received asynchronously, not within the AT command mechanism.
+ *
+ * The enum class at_unsolicited_msg will contain those values so you must use them when calling the interface.
+ */
+#define AT_UNSOLICITED_MESSAGES_NAMES neul, no_carrier
+
+//! The unsolicited messages which can be received asynchronously. Are mapped by AT_UNSOLICITED_MESSAGES_NAMES.
+#define AT_UNSOLICITED_MESSAGES "Neul", "NO CARRIER"
+
+#endif /* AT_CMD_CONFIG_HPP */
