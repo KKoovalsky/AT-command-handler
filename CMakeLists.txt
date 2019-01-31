@@ -21,7 +21,9 @@ ENDIF()
 
 SET(EXT_DEPS ${ROOT_DIR}/external_dependencies)
 SET(UNITY ${EXT_DEPS}/unity/src)
+SET(FREERTOS ${EXT_DEPS}/FreeRTOS)
 SET(UNIT_TESTS_NON_RTOS_DIR ${ROOT_DIR}/tests/non-rtos)
+SET(UNIT_TESTS_RTOS_DIR ${ROOT_DIR}/tests/rtos)
 SET(SRC_DIR ${ROOT_DIR}/src)
 
 IF(UNIT_TEST_NON_RTOS)
@@ -32,6 +34,7 @@ IF(UNIT_TEST_NON_RTOS)
         ${SRC_DIR}
         ${ROOT_DIR}
         ${UNIT_TESTS_NON_RTOS_DIR}
+        ${ROOT_DIR}/tests
         )
 
     FILE(GLOB SOURCES
@@ -45,7 +48,40 @@ IF(UNIT_TEST_NON_RTOS)
         ${UNITY}/unity.c
         )
 
-ELSEIF(UNIT_TEST_RTOS_LOCAL)
+ELSEIF(UNIT_TEST_RTOS)
+    SET(BIN_SUFFIX "rtos_local_test")
+
+    SET(FREERTOS_PORT ${FREERTOS}/portable/GCC/Linux)
+    SET(FREERTOS_SOURCES ${FREERTOS}/queue.c ${FREERTOS}/list.c ${FREERTOS}/tasks.c ${FREERTOS}/timers.c
+        ${FREERTOS_PORT}/port.c ${FREERTOS}/portable/MemMang/heap_3.c)
+
+    SET(THREADS_PREFER_PTHREAD_FLAG ON)
+    FIND_PACKAGE(Threads REQUIRED)
+
+    INCLUDE_DIRECTORIES(
+        ${FREERTOS_PORT}
+        ${FREERTOS}/include
+        ${FREERTOS}/include/private
+        ${UNITY}
+        ${SRC_DIR}
+        ${ROOT_DIR}
+        ${UNIT_TESTS_RTOS_DIR}
+        ${ROOT_DIR}/tests
+        ${EXT_DEPS}
+        )
+
+    FILE(GLOB SOURCES
+        "${UNIT_TESTS_RTOS_DIR}/*.c*"
+        "${SRC_DIR}/*.c*"
+        )
+
+    ADD_EXECUTABLE(${PRJ_NAME}
+        ${FREERTOS_SOURCES}
+        ${SOURCES}
+        ${UNITY}/unity.c
+        )
+
+    TARGET_LINK_LIBRARIES(${PRJ_NAME} Threads::Threads)
 ELSE()
 ENDIF()
 

@@ -1,3 +1,5 @@
 at_cmd_config.hpp
 bin/
 build/
+tags
+*.swp
